@@ -75,8 +75,8 @@ def build_curl_command(request):
     data = maybe_str(request.data())
     if data:
         if is_json(request.headers.get('Content-Type', '')):
-            data = json.dumps(data)
-        parts.append('--data-raw \'{}\''.format(data))
+            data = json.dumps(json.dumps(data))
+        parts.append('--data-raw {}'.format(data))
 
     # Authorization
     if method == 'Basic':
@@ -118,11 +118,11 @@ def build_wget_command(request):
     data = maybe_str(request.data())
     if data:
         if is_json(request.headers.get('Content-Type', '')):
-            data = json.dumps(data)
+            data = json.dumps(json.dumps(data))
         if request.command == 'POST':
-            parts.append('--post-data=\'{}\''.format(data))
+            parts.append('--post-data={}'.format(data))
         elif request.command != 'POST':
-            parts.append('--body-data=\'{}\''.format(data))
+            parts.append('--body-data={}'.format(data))
 
     # Authorization
     if method == 'Basic':
@@ -170,7 +170,7 @@ def build_httpie_command(request):
             # We need to explicitly set the separators to get consistent
             # whitespace handling across Python 2 and 3. See
             # https://bugs.python.org/issue16333 for details.
-            redir_input = shlex_quote(
+            redir_input = json.dumps(
                 json.dumps(data, indent=2, sort_keys=True,
                            separators=(',', ': ')))
         else:
