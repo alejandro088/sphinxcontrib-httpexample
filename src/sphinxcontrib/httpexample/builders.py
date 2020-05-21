@@ -171,7 +171,7 @@ def build_httpie_command(request):
             # whitespace handling across Python 2 and 3. See
             # https://bugs.python.org/issue16333 for details.
             redir_input = json.dumps(
-                json.dumps(data, indent=2, sort_keys=True,
+                json.dumps(data, sort_keys=True,
                            separators=(',', ': ')))
         else:
             redir_input = shlex_quote(data)
